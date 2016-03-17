@@ -6,20 +6,23 @@ Bienvenidos/as al repositorio para el curso de R, donde encontrarán los script 
 
 Los paquetes o también llamadas bibliotecas permiten ampliar las capacidades del programa R, para el curso requerimos los siguientes paquetes:
 
-dplyr
-data.table
-sqldf
-readr
-readxl
-ggvis
-ggplot2
-rmarkdown
-magrittr
-knitr
+* dplyr
+* data.table
+* sqldf
+* readr
+* readxl
+* ggvis
+* ggplot2
+* rmarkdown
+* magrittr
+* knitr
 
 # Manipulación de datos
 
-R cuenta con una amplia gama de librerías para el manejo de bases de datos, en el curso revisaremos tres de las librerías más utilizadas y modernas sqldf, dplyr y data.table.
+R cuenta con una amplia gama de librerías para el manejo de bases de datos, en el curso revisaremos tres de las librerías más utilizadas y modernas:
+* sqldf
+* dplyr
+* data.table
 
 Estas librerías permiten seleccionar columnas, añadir columnas, filtrar filas, ordenar la información en base a algún criterio y obtener estadísticos de resumen de modo sencillo y un código limpio.
 
