@@ -1,12 +1,11 @@
 ###-----------------------------------------------###
 ###----------------- Curso R ---------------------###
-###----------------- Clase 2----------------------###
 ###-----------------------------------------------###
 
 ## Estructuras de Datos
-# R no tiene estructuras 0d (tipo escalar), el objeto b醩ico son los vectores 
+# R no tiene estructuras 0d (tipo escalar), el objeto b谩sico son los vectores 
 # El texto luego de # es un comentario (no es interpretado por R)
-# Para crear un objeto se utiliza el operador de asignaci髇  <- 
+# Para crear un objeto se utiliza el operador de asignaci贸n  <- 
 
 x <- 5
 x
@@ -15,20 +14,20 @@ y <- "SSL"
 y
 
 ## Vectores
-## 1. Vectores at髆icos, nombro como vec a mi vector, el nombre de un vector puede ser cualquiera
-## R distingue nombres de vectores con may鷖culas o min鷖culas como diferentes
+## 1. Vectores at贸micos, nombro como vec a mi vector, el nombre de un vector puede ser cualquiera
+## R distingue nombres de vectores con may煤sculas o min煤sculas como diferentes
 
 vec <- c(1, 2)
 vec
 
-## Elementos de un vector at髆ico
-# La i-閟ima componente de un vector se obtiene mediante vec[i]
+## Elementos de un vector at贸mico
+# La i-茅sima componente de un vector se obtiene mediante vec[i]
 
 vec <- c(6, 1, 3, 6, 10, 5)
 vec
 vec[5]
 
-# Elementos de la posici髇 2, 4, 6 de un vector
+# Elementos de la posici贸n 2, 4, 6 de un vector
 vec[c(2, 4, 6)]
 
 # Eliminamos elementos del vector antecediendo el signo -
@@ -36,25 +35,25 @@ vec[c(2, 4, 6)]
 vec[-c(2)]
 vec[-c(1, 6)]
 
-# TRUE, FALSE tambi閚 permiten obtener ciertos elementos:
+# TRUE, FALSE tambi茅n permiten obtener ciertos elementos:
 vec <- c(6, 1, 3, 6, 10, 5)
 vec
-# elementos de la posici髇 2, 4, 6
+# elementos de la posici贸n 2, 4, 6
 vec[c(FALSE, TRUE, FALSE, TRUE, FALSE, TRUE)]
 
-#################  Tipos de vectores at髆icos ################# 
+#################  Tipos de vectores at贸micos ################# 
 
-# Vector double (n鷐eros reales: ....,-3,-2,-1,0,1,2,3,4,...; decimales tambi閚)
+# Vector double (n煤meros reales: ....,-3,-2,-1,0,1,2,3,4,...; decimales tambi茅n)
 dbl_vec <- c(1, 2, -1, 8, 15)
 dbl_vec
 
 ## Vector entero
-# sufijo L para vector entero; es decir, datos que no contienen n鷐eros decimales
+# sufijo L para vector entero; es decir, datos que no contienen n煤meros decimales
 int_vec <- c(3L, 7L, 1L, 14L, 21L) 
 int_vec
 
-## Vector l骻ico: son usados para tomar desiciones 
-# TRUE y FALSE (T, F) para vector l骻ico
+## Vector l贸gico: son usados para tomar desiciones 
+# TRUE y FALSE (T, F) para vector l贸gico
 log_vec <- c(FALSE, TRUE, F, T, TRUE, F) 
 log_vec
 ## Vector caracter
@@ -64,7 +63,7 @@ chr_vec
 ######################### Tipos y Tests #########################
 
 # Para hacer una prueba al vector de datos sobre el tipo de elementos del que consta, si son del tipo
-# entero, double, l骻ico o caracter
+# entero, double, l贸gico o caracter
 
 # Ejemplo de un vector double
 
@@ -83,10 +82,10 @@ is.integer(int_vec)
 is.atomic(int_vec)
 
 
-############## Funci髇 is.numeric(). #################
+############## Funci贸n is.numeric(). #################
 
 # Retorna TRUE para vectores double e integer; es decir, retorna TRUE O FALSE para decirnos si el vector
-# de datos esta compuesto o no por datso num閞icos
+# de datos esta compuesto o no por datso num茅ricos
         
 dbl_vec <- c(1, 2, -1.2)
 dbl_vec
@@ -96,10 +95,10 @@ int_vec <- c(3L, 7L, 1L)
 int_vec
 is.numeric(int_vec)
 
-#################  Coerci髇  ###################
-# Cuando los elementos de un vector de datos son de diferente tipo, algunos num閞icos, algunos caracteres 
-# o algnos l骻icos, entonces la COERCI覰  homogeniza al vector de datos, coerciona los datos al tipo 
-# de dato m醩 flexible dado por la siguiente jerarqu韆
+#################  Coerci贸n  ###################
+# Cuando los elementos de un vector de datos son de diferente tipo, algunos num茅ricos, algunos caracteres 
+# o algnos l贸gicos, entonces la COERCI脫N  homogeniza al vector de datos, coerciona los datos al tipo 
+# de dato m谩s flexible dado por la siguiente jerarqu铆a
 
 # character <= double <= integer <= logical
 
@@ -113,9 +112,9 @@ vec1 <- c(0.5, 2, TRUE, FALSE)
 vec1
 typeof(vec1)
 
-# Las funciones aritm閠icas, operaciones matem醫icas en general  +, abs, log, etc coercionan a double o integer.
+# Las funciones aritm茅ticas, operaciones matem谩ticas en general  +, abs, log, etc coercionan a double o integer.
 
-# Coerci髇 de funciones
+# Coerci贸n de funciones
 
 vec <- c(3, 0.5, -6)
 vec1 <- (vec)^2
@@ -123,7 +122,7 @@ vec1
 typeof(vec1)
 
 
-vec1 <- c(1L, 3L, -6L) #n鷐eros enteros
+vec1 <- c(1L, 3L, -6L) #n煤meros enteros
 vec2 <- c(2L, -5L, 9L)
 vec3 <- vec1 + vec2
 vec3
@@ -142,44 +141,44 @@ vec2 <- c(TRUE, TRUE, FALSE, FALSE)
 (vec3 <- vec1 | vec2)
 typeof(vec3)
 
-## Coerci髇 - Funciones "as"
+## Coerci贸n - Funciones "as"
 # Para coercionar un vector a un determinado tipo, se utilizan las funciones "as"
 
-# coerci髇 directa: double a character
+# coerci贸n directa: double a character
 vec <- c(1.7, 5, 8.2, 15.1)
 vec1 <- as.character(vec)
 vec1
 typeof(vec1)
 
-# coerci髇 directa: logical a character
+# coerci贸n directa: logical a character
 vec <- c(FALSE, TRUE, FALSE, TRUE, TRUE) 
 vec1 <- as.character(vec)
 vec1
 
-# coerci髇 directa: logical a double
+# coerci贸n directa: logical a double
 vec <- c(FALSE, TRUE, FALSE, TRUE, TRUE) 
 vec1 <- as.double(vec)
 vec1
 # TRUE -> 1
 # FALSE -> 0
 
-sum(vec) # n鷐ero total de TRUEs 
-mean(vec) # proporci髇 de TRUEs
+sum(vec) # n煤mero total de TRUEs 
+mean(vec) # proporci贸n de TRUEs
 
 
-# coerci髇 indirecta: character a double
-vec <- c("15", "Sin Informaci髇", "25", "-")
+# coerci贸n indirecta: character a double
+vec <- c("15", "Sin Informaci贸n", "25", "-")
 vec1 <- as.double(vec)
 vec1
 #NAs introducidos por coercion
 
-# coerci髇 indirecta: character a logical
+# coerci贸n indirecta: character a logical
 vec <- c("FALSE", "TRUE", "Sin Info", "-", "TRUE") 
 vec1 <- as.logical(vec)
 vec1
 #NAs introducidos por coercion
 
-# coerci髇 indirecta: double a logical
+# coerci贸n indirecta: double a logical
 vec <- c(1, 0, 17, 3.5, 0)
 vec1 <- as.logical(vec)
 vec1
@@ -188,7 +187,7 @@ vec1
 
 
 ## Vectores anidados
-# Los vectores at髆icos pueden ser anidados
+# Los vectores at贸micos pueden ser anidados
 c(1, c(2, c(3,4)))
 
 c(1, 2, 3, 4)
@@ -205,12 +204,12 @@ is.atomic(lst)
 # probamos si lst es una lista
 is.list(lst)
 
-## Coerci髇
-# coerci髇 del vector lst a una lista
+## Coerci贸n
+# coerci贸n del vector lst a una lista
 lst <- c("cheques", 4, 0.5,5,6.8)
 as.list(lst)
 
-# coerci髇 de lista a vector (reglas de coerci髇)
+# coerci贸n de lista a vector (reglas de coerci贸n)
 lst <- list(1:10, c("Azuay", "Quito", "Loja", "Ambato"), c(TRUE, FALSE,TRUE), c(1.3, 4.5,9.9))
 unlist(lst)
 
@@ -227,7 +226,7 @@ lst[4]
 lst[[4]]
 lst$nomb_obj
 
-## Listas vs vectores at髆icos
+## Listas vs vectores at贸micos
 # Una lista es un vector recursivo
 lst <- list(list(c(1,-5), c("a", "b")), list("Source", "Stat"))
 str(lst)
@@ -237,7 +236,7 @@ c(1, c(2, c(3,4)))  ;  c(1, 2, 3, 4)
 
 
 ## Atributos
-# Vector at贸mico:
+# Vector at脙鲁mico:
 # Vector sin el atributo names
 vec <- c(3, 6, -1, 0.5)
 attributes(vec)
@@ -270,20 +269,20 @@ is.vector(lst)
 
 
 ## Matrices
-# Una matriz es un vector con el atributo dim (dimensi贸n).
+# Una matriz es un vector con el atributo dim (dimensi脙鲁n).
 # El atributo dim es un vector de longitud 2: c(nrow, ncol).
 mtx <- matrix (1:12,nrow=3, ncol=4, byrow=FALSE)
 # se construye por columnas por default (byrow=FALSE)
 mtx
 attributes(mtx)
 
-# dim() se usa para a帽adir el atributo dim a un vector o
+# dim() se usa para a脙卤adir el atributo dim a un vector o
 mtx <- 1:12
 mtx
 dim(mtx) <- c(3,4)
 mtx
 
-# para hallar la dimensi贸n de una matriz.
+# para hallar la dimensi脙鲁n de una matriz.
 mtx <- matrix (1:12, nrow=3, ncol=4, byrow=FALSE)
 dim(mtx)
 
@@ -303,14 +302,14 @@ mtx[c(TRUE, FALSE, TRUE),]  # filas 1 y 3
 
 
 ## Factores
-# Es la estructura de datos utilizada para almacenar variables categ贸ricas.
-# Creaci贸n de un factor si se dispone de un vector integer
+# Es la estructura de datos utilizada para almacenar variables categ脙鲁ricas.
+# Creaci脙鲁n de un factor si se dispone de un vector integer
 vec <- c(1, 2, 2, 1, 2, 1, 2)
 vec
 fac <- factor(vec, levels=c(1,2), labels = c("Femenino", "Masculino"))
 fac
 
-# Creaci贸n de un factor si se dispone de un vector character
+# Creaci脙鲁n de un factor si se dispone de un vector character
 vec <- c("Femenino","Masculino","Masculino","Femenino","Masculino",
          "Femenino","Masculino")
 vec
@@ -327,10 +326,10 @@ fac <- factor(vec, levels=c(1,2), labels = c("Femenino", "Masculino"))
 attributes(fac)
 
 # Para considerar el vector entero utilizamos unclass().
-# eliminaci贸n del atributo class
+# eliminaci脙鲁n del atributo class
 unclass(fac)
 
-# Para realizar conteos por categor铆a, se utiliza la funci贸n table().
+# Para realizar conteos por categor脙颅a, se utiliza la funci脙鲁n table().
 vec <- c(1, 2, 2, 1, 2, 1, 2)
 fac <- factor(vec, levels=c(1,2), labels = c("Femenino", "Masculino"))
 # frecuencias
@@ -340,9 +339,9 @@ prop.table(table(fac))
 
 ## Data Frame
 # Es una lista en la cual todos los elementos tienen la misma longitud.
-# A diferencia de las matrices, pueden almacenar vectores at贸micos de cualquier tipo.
+# A diferencia de las matrices, pueden almacenar vectores at脙鲁micos de cualquier tipo.
 # Presenta varios atributos adicionales class, rownames, names.
-# Es la estructura de datos m谩s utilizada para almacenar data tabulada.
+# Es la estructura de datos m脙隆s utilizada para almacenar data tabulada.
 
 dbl_vec <- c(1, 2, 3)
 dbl_vec
@@ -351,7 +350,7 @@ chr_vec
 log_vec <- c(TRUE, FALSE, TRUE)
 log_vec
 
-# Creaci贸n de un data frame
+# Creaci脙鲁n de un data frame
 df <- data.frame(dbl_vec, chr_vec, log_vec)
 df
 # Tipo de un data frame
@@ -365,11 +364,11 @@ names(df) # colnames(df)
 class(df)
 # Nombres de filas
 rownames(df)
-# Dimensi贸n
+# Dimensi脙鲁n
 dim(df)
-# N煤mero de columnas
+# N脙潞mero de columnas
 nrow(df)
-# N煤mero de filas
+# N脙潞mero de filas
 ncol(df)
 
 ## Elementos de un data frame
@@ -398,7 +397,7 @@ data(mtcars)
 View(mtcars)
 # Visualizar las n primeras filas
 head(mtcars, n = 2)
-# Visualizar las n 煤ltimas filas
+# Visualizar las n 脙潞ltimas filas
 tail(mtcars, n = 2)
 
 
@@ -410,21 +409,21 @@ names(mtcars) # colnames(mtcars)
 class(mtcars)
 # Nombres de filas
 rownames(mtcars)
-# Dimensi贸n
+# Dimensi脙鲁n
 dim(mtcars)
-# N煤mero columnas
+# N脙潞mero columnas
 nrow(mtcars)
-# N煤mero filas
+# N脙潞mero filas
 ncol(mtcars)
 
 
-## Funci贸n structure
-# La funci贸n str() (structure) presenta una descripci贸n compacta de la estructura de datos. 
+## Funci脙鲁n structure
+# La funci脙鲁n str() (structure) presenta una descripci脙鲁n compacta de la estructura de datos. 
 str(mtcars)
 
 ## Missing Values
-# NA: Not Available. Dato p茅rdido.
-# NaN: Not a Number. Resultado de una indeterminaci贸n 0/0, Inf/Inf, Inf*0.
+# NA: Not Available. Dato p脙漏rdido.
+# NaN: Not a Number. Resultado de una indeterminaci脙鲁n 0/0, Inf/Inf, Inf*0.
 x <- c(Inf*0, 3.2, NA, 5, NA)
 x
 
@@ -432,10 +431,10 @@ y <- c(-1, 0/0, NA, 5, -6)
 y
 
 ## Missing Values
-# is.na(x) retorna TRUE para elementos NA de un vector at贸mico o lista.
+# is.na(x) retorna TRUE para elementos NA de un vector at脙鲁mico o lista.
 x <- c(Inf*0, 3.2, NA, 5, NA)
 is.na(x)
 
-# is.nan(x) retorna TRUE para elementos NaN de un vector at贸mico.
+# is.nan(x) retorna TRUE para elementos NaN de un vector at脙鲁mico.
 y <- c(-1, 0/0, NA, 5, Inf*0)
 is.nan(y)
