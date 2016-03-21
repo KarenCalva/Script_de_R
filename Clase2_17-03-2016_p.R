@@ -1,4 +1,4 @@
-## Script - Clase 01
+## Script - Clase 2 reapaso y aplicación
 
 install.packages('dplyr', dependencies = TRUE)
 install.packages(c('data.table','ggplot2'), dependencies = TRUE)
