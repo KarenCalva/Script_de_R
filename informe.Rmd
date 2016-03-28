@@ -1,0 +1,214 @@
+---
+output: pdf_document
+---
+
+\centering 
+![SERCOP](figures/SERCOP.png)
+
+
+## BOLETÍN DE LA CONTRATACIÓN PÚBLICA ECUATORIANA
+## A ENERO 2016
+
+
+
+El Servicio Nacional de Contratación Pública presenta la evolución  de la contratación pública a nivel nacional.
+
+```{r, echo=FALSE,results='markup'}
+# no se muestran advertencias
+options(warn=-1)
+library(haven)
+library(dplyr)
+ getwd()
+setwd("~/2 CURSO DE R/informe")
+list.files()
+
+ install.packages("readxl", dependencies = TRUE)
+library(readxl)
+#hojas de la base de datos
+excel_sheets(path = file.path("~/2 CURSO DE R/informe", "COMPRAS 2015.xlsx"))
+
+datos <- read_excel("COMPRAS 2015.xlsx",sheet = "Hoja3",col_names = TRUE, na="")
+datos <- as.data.frame(datos)
+class(datos)
+str(datos)
+glimpse(datos)
+dim(datos)
+summary(datos)
+
+
+
+#Separación de la data por tipo de variable
+ind <- integer(dim(datos)[[1]])
+ind
+for(i in 1:dim(datos)[2]){
+  if(is.numeric(datos[,i])==TRUE){
+    ind[i] <- 1
+  }
+}
+
+#Creación de la base num_base
+subdatos1 <-datos[which(ind==1)]
+length(subdatos1)
+class(subdatos1)
+str(subdatos1)
+n<-dim(subdatos1)[2]
+n
+
+
+limpieza <- function(subdatos1){
+      for(i in 1:n){
+  # valores perdidos
+  #calculamos la media de cada variable y la asignamos a los valores NA
+  m <- median(subdatos1[[i]],na.rm=TRUE)
+  subdatos1[[i]][which(is.na(subdatos1[[i]])==1)] <- m
+  # valores atipicos
+  # IQR el rango intercuartil (Q3-Q1)
+  # IQR depende de cada variable
+  RIQ <- quantile(subdatos1[[i]],0.75)-quantile(subdatos1[[i]],0.25)
+  subdatos1[[i]] <- ifelse(subdatos1[[i]]<m-1.5*RIQ,m-1.5*RIQ,ifelse(subdatos1[[i]]>m+1.5*RIQ,m+1.5*RIQ,subdatos1[[i]]))
+}
+      return(subdatos1)
+}
+
+lapply(subdatos1, limpieza)
+str(subdatos1)
+View(subdatos1)
+
+
+
+#Curtosis
+curtosis=function(variable) {
+  curt=(mean((variable-mean(variable, na.rm = TRUE))^4, na.rm = TRUE)/
+          (sd(variable, na.rm = TRUE)^4))-3 
+  return(curt)
+}
+
+#Asimetria
+asimetria <- function(variable){
+  asim <- mean((variable-mean(variable, na.rm = TRUE))^3, na.rm = TRUE)/
+    sd(variable, na.rm = TRUE)^2
+  return(asim)}
+
+#CÃ¡lculo de los estadí?sticos
+estadisticos <- function(variable){
+  datos <- c( min(variable, na.rm = TRUE),
+              quantile(variable, 0.01, na.rm = TRUE), 
+              quantile(variable, 0.02, na.rm = TRUE), 
+              quantile(variable, 0.05, na.rm = TRUE), 
+              median(variable, na.rm = TRUE), 
+              mean(variable, na.rm = TRUE), 
+              curtosis(variable),
+              asimetria(variable), 
+              IQR(variable, na.rm = TRUE), 
+              quantile(variable, 0.95, na.rm = TRUE), 
+              quantile(variable, 0.98, na.rm = TRUE), 
+              quantile(variable, 0.99, na.rm = TRUE), 
+              max(variable, na.rm = TRUE))
+  return(datos)
+}
+
+#Crea la tabla con los estadistÃ?cos de cada variable de la base
+matriz.datos <- function(base){
+  tabla <- data.frame(matrix(nrow=dim(base)[2], ncol=13))
+  colnames(tabla) <- c("Mi?nimo", "Perc_1", "Perc_2", "Perc_5", "Mediana", 
+                       "Media", "Curtosis", "Asimetri?a", "R_Inter", 
+                       "Perc_95", "Perc_98", "Perc_99", "Maximo")
+  for(i in 1:dim(base)[2]){
+    tabla[i,] <- t(estadisticos(base[,i]))
+  }
+  return(tabla)
+}
+
+#CreaciÃ³n de la tabla con los estadÃ?ticos de la base num_base
+library(xtable)
+tabla <- matriz.datos(subdatos1)
+xtable(tabla, digits=2, align=c("l","c","c","c","c","c","c","c","c","c","c","c","c","c"), 
+       caption=c("Tabla con los estadisticos de la base"))
+View(tabla)
+
+
+
+
+#################################
+##### EstimaciÃ³n Bootstrap  #####
+#################################
+
+library(haven)
+datos <- read_sav("bootstrap.sav")
+dim(datos)
+
+mean(datos$EDAD)
+
+B <- 5000
+n <- nrow(datos)
+
+boot <- matrix(sample(datos$EDAD, 
+                      size=B*n, replace=TRUE),B,n)
+
+est <- apply(boot, 1, mean)
+hist(est)
+
+library(ggplot2)
+ggplot(data.frame(media=est), aes(x=media)) +
+      geom_histogram(binwidth=0.03, aes(y=..density..)) +
+      geom_density(color="red")
+
+quantile(est, probs=c(0.025,0.975))
+
+
+
+
+
+
+
+
+
+
+
+#Creación de la base char_base
+subdatos2 <- datos[which(ind==0)]
+length(subdatos2)
+names(char_base)
+#Modificación de la base nchar_base
+library(dplyr)
+names(char_base[c(3,8,9,14)])
+char_data <- char_base %>% 
+  mutate(TIENE_CREDITO=ifelse(TIENE_CREDITO=="SI", paste(1), paste(0))) %>% 
+  mutate(TELF_CASA=ifelse(TELF_CASA=="S", paste(1), paste(0))) %>% 
+  mutate(TELF_MOVIL=ifelse(TELF_MOVIL=="S", paste(1), paste(0))) %>%
+  mutate(MARCA=ifelse(MARCA=="SI", paste(1), paste(0)))
+
+#ComprobaciÃ³n de la modificaiÃ³n realizada
+before <- char_base %>% select(c(3,8,9,14))
+after <- char_data %>% select(c(3,8,9,14))
+
+xtable(before[1:20,], digits=0, align=c("l","c","c","c","c"), 
+       caption=c("Tabla original"))
+
+xtable(after[1:20,], digits=0, align=c("l","c","c","c","c"), 
+       caption=c("Tabla modificada"))
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r,echo=FALSE,results='markup'}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
