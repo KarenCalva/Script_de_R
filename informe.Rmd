@@ -1,7 +1,7 @@
 ---
 output: pdf_document
 ---
-
+-
 \centering 
 ![SERCOP](figures/SERCOP.png)
 
@@ -13,44 +13,56 @@ output: pdf_document
 
 El Servicio Nacional de Contratación Pública presenta la evolución  de la contratación pública a nivel nacional.
 
-```{r, echo=FALSE,results='markup'}
+
+```{r, include=FALSE}
+# echo=FALSE. NO SE MUESTRA EL CÓDIGO DE R
+# resultados= 'markup'. SE MUESTRAN LOS RESULTADOS, TABLAS, GRÁFICAS, ETC...
 # no se muestran advertencias
-options(warn=-1)
-library(haven)
-library(dplyr)
+# ACTIVAR MARKDOWN
+# install.packages("knitr")
+#install.packages("ggplot2")
+#install.packages("lattice")
+
  getwd()
 setwd("~/2 CURSO DE R/informe")
+options(warn=-1)
+library(haven)
+library(dplyr) #MODIFICAR LA BASE DE DATOS
+#LAS CONSULTAS SQL SON CUANDO LA BASE ESTA LISTA(LIMPIA, SEGMENTADA)
+
 list.files()
 
- install.packages("readxl", dependencies = TRUE)
+# install.packages("readxl", dependencies = TRUE)
 library(readxl)
 #hojas de la base de datos
 excel_sheets(path = file.path("~/2 CURSO DE R/informe", "COMPRAS 2015.xlsx"))
 
 datos <- read_excel("COMPRAS 2015.xlsx",sheet = "Hoja3",col_names = TRUE, na="")
+class(datos)
 datos <- as.data.frame(datos)
 class(datos)
-str(datos)
-glimpse(datos)
+#str(datos)
+glimpse(datos) #es un str mas simple y ordenado
 dim(datos)
 summary(datos)
 
 
 
-#Separación de la data por tipo de variable
-ind <- integer(dim(datos)[[1]])
+#Separaci de la base de datos por tipo de variable
+ind <- integer(dim(datos)[[2]]) #guardar un vector con el numero de individuos de la base de datos
 ind
 for(i in 1:dim(datos)[2]){
   if(is.numeric(datos[,i])==TRUE){
     ind[i] <- 1
   }
+  else {ind[i]<-0}
 }
-
-#Creación de la base num_base
+ind
+#Creaci???n de la base num_base
 subdatos1 <-datos[which(ind==1)]
 length(subdatos1)
 class(subdatos1)
-str(subdatos1)
+#str(subdatos1)
 n<-dim(subdatos1)[2]
 n
 
@@ -71,8 +83,9 @@ limpieza <- function(subdatos1){
 }
 
 lapply(subdatos1, limpieza)
-str(subdatos1)
-View(subdatos1)
+#str(subdatos1)
+#View(subdatos1)
+
 
 
 
@@ -89,7 +102,7 @@ asimetria <- function(variable){
     sd(variable, na.rm = TRUE)^2
   return(asim)}
 
-#CÃ¡lculo de los estadí?sticos
+#Cálculo de los estadíticos
 estadisticos <- function(variable){
   datos <- c( min(variable, na.rm = TRUE),
               quantile(variable, 0.01, na.rm = TRUE), 
@@ -106,8 +119,12 @@ estadisticos <- function(variable){
               max(variable, na.rm = TRUE))
   return(datos)
 }
+```
 
-#Crea la tabla con los estadistÃ?cos de cada variable de la base
+```{r, include=TRUE, results='markup'}
+options(warn=-1)
+#Crea la tabla con los estadist????cos de cada variable de la base
+# la siguiente funcino sirve para cualquier base de datos LIMPIA Y ORDENADA
 matriz.datos <- function(base){
   tabla <- data.frame(matrix(nrow=dim(base)[2], ncol=13))
   colnames(tabla) <- c("Mi?nimo", "Perc_1", "Perc_2", "Perc_5", "Mediana", 
@@ -119,23 +136,13 @@ matriz.datos <- function(base){
   return(tabla)
 }
 
-#CreaciÃ³n de la tabla con los estadÃ?ticos de la base num_base
+#Creación de la tabla con los estad????ticos de la base num_base
 library(xtable)
 tabla <- matriz.datos(subdatos1)
 xtable(tabla, digits=2, align=c("l","c","c","c","c","c","c","c","c","c","c","c","c","c"), 
        caption=c("Tabla con los estadisticos de la base"))
-View(tabla)
 
 
-
-
-#################################
-##### EstimaciÃ³n Bootstrap  #####
-#################################
-
-library(haven)
-datos <- read_sav("bootstrap.sav")
-dim(datos)
 
 mean(datos$EDAD)
 
@@ -155,60 +162,10 @@ ggplot(data.frame(media=est), aes(x=media)) +
 
 quantile(est, probs=c(0.025,0.975))
 
+hist(subdatos1$presupuesto)
 
 
-
-
-
-
-
-
-
-
-#Creación de la base char_base
-subdatos2 <- datos[which(ind==0)]
-length(subdatos2)
-names(char_base)
-#Modificación de la base nchar_base
-library(dplyr)
-names(char_base[c(3,8,9,14)])
-char_data <- char_base %>% 
-  mutate(TIENE_CREDITO=ifelse(TIENE_CREDITO=="SI", paste(1), paste(0))) %>% 
-  mutate(TELF_CASA=ifelse(TELF_CASA=="S", paste(1), paste(0))) %>% 
-  mutate(TELF_MOVIL=ifelse(TELF_MOVIL=="S", paste(1), paste(0))) %>%
-  mutate(MARCA=ifelse(MARCA=="SI", paste(1), paste(0)))
-
-#ComprobaciÃ³n de la modificaiÃ³n realizada
-before <- char_base %>% select(c(3,8,9,14))
-after <- char_data %>% select(c(3,8,9,14))
-
-xtable(before[1:20,], digits=0, align=c("l","c","c","c","c"), 
-       caption=c("Tabla original"))
-
-xtable(after[1:20,], digits=0, align=c("l","c","c","c","c"), 
-       caption=c("Tabla modificada"))
-
-
-
-
-
-
-
-
-
-
+#hasta aqui se hacen operaciones internas de R
 ```
 
-
-
-```{r,echo=FALSE,results='markup'}
-summary(cars)
-```
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+kjhgjkxdflnhjlknjfxkg
