@@ -1,7 +1,7 @@
 ---
 output: pdf_document
 ---
--
+
 \centering 
 ![SERCOP](figures/SERCOP.png)
 
@@ -13,8 +13,7 @@ output: pdf_document
 
 El Servicio Nacional de Contratación Pública presenta la evolución  de la contratación pública a nivel nacional.
 
-
-```{r, include=FALSE}
+```{r,echo=FALSE,results='hide'}
 # echo=FALSE. NO SE MUESTRA EL CÓDIGO DE R
 # resultados= 'markup'. SE MUESTRAN LOS RESULTADOS, TABLAS, GRÁFICAS, ETC...
 # no se muestran advertencias
@@ -22,10 +21,10 @@ El Servicio Nacional de Contratación Pública presenta la evolución  de la contra
 # install.packages("knitr")
 #install.packages("ggplot2")
 #install.packages("lattice")
-
+options(warn=-1)
  getwd()
 setwd("~/2 CURSO DE R/informe")
-options(warn=-1)
+
 library(haven)
 library(dplyr) #MODIFICAR LA BASE DE DATOS
 #LAS CONSULTAS SQL SON CUANDO LA BASE ESTA LISTA(LIMPIA, SEGMENTADA)
@@ -45,6 +44,10 @@ class(datos)
 glimpse(datos) #es un str mas simple y ordenado
 dim(datos)
 summary(datos)
+
+
+datos$Identificador Solicitud Compra <- as.character(datos$Identificador Solicitud Compra)
+data$FECHA_INGRESO_TRABAJO <- as.character(data$FECHA_INGRESO_TRABAJO)
 
 
 
@@ -119,16 +122,30 @@ estadisticos <- function(variable){
               max(variable, na.rm = TRUE))
   return(datos)
 }
+
+
+#SUBASE DE COLUMNAS CON DATOS TIPO CARACTER
+
+subdatos2 <- unlist(lapply(datos,class)=="character")
+subdatos2<-subset(datos,select=c(subdatos2))
+class(subdatos2)
+str(subdatos2)
+Zonales <- as.factor(subdatos2$ Zonales)
+#Nombre_Entidad<-as.factor(subdatos2$Nombre_Entidad)
+#table(Nombre_Entidad)
+table(subdatos2$ Zonales)
+piechart(subdatos2$ Zonales) 
+
 ```
 
-```{r, include=TRUE, results='markup'}
+```{r , echo=FALSE, results='hide'}
 options(warn=-1)
 #Crea la tabla con los estadist????cos de cada variable de la base
 # la siguiente funcino sirve para cualquier base de datos LIMPIA Y ORDENADA
 matriz.datos <- function(base){
   tabla <- data.frame(matrix(nrow=dim(base)[2], ncol=13))
-  colnames(tabla) <- c("Mi?nimo", "Perc_1", "Perc_2", "Perc_5", "Mediana", 
-                       "Media", "Curtosis", "Asimetri?a", "R_Inter", 
+  colnames(tabla) <- c("Minimo", "Perc_1", "Perc_2", "Perc_5", "Mediana", 
+                       "Media", "Curtosis", "Asimetria", "R_Inter", 
                        "Perc_95", "Perc_98", "Perc_99", "Maximo")
   for(i in 1:dim(base)[2]){
     tabla[i,] <- t(estadisticos(base[,i]))
@@ -143,29 +160,27 @@ xtable(tabla, digits=2, align=c("l","c","c","c","c","c","c","c","c","c","c","c",
        caption=c("Tabla con los estadisticos de la base"))
 
 
+```
+```{r , echo=FALSE, results='markup'}
+print(tabla)
+```
+```{r , echo=FALSE, results='hide'}
+options(warn=-1)
+mean(subdatos1$Presupuesto)
 
-mean(datos$EDAD)
-
-B <- 5000
+B <- 1000
 n <- nrow(datos)
 
-boot <- matrix(sample(datos$EDAD, 
+boot <- matrix(sample(subdatos1$Presupuesto, 
                       size=B*n, replace=TRUE),B,n)
 
-est <- apply(boot, 1, mean)
-hist(est)
-
-library(ggplot2)
-ggplot(data.frame(media=est), aes(x=media)) +
-      geom_histogram(binwidth=0.03, aes(y=..density..)) +
-      geom_density(color="red")
-
-quantile(est, probs=c(0.025,0.975))
-
-hist(subdatos1$presupuesto)
-
-
-#hasta aqui se hacen operaciones internas de R
+Presupuesto <- apply(boot, 1, mean)
 ```
 
-kjhgjkxdflnhjlknjfxkg
+```{r, echo=FALSE, results='markup'}
+options(warn=-1)
+hist(Presupuesto)
+```
+
+
+
